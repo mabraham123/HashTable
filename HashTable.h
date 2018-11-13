@@ -9,6 +9,7 @@ using namespace std;
 
 enum HashTableError { OUT_OF_MEMORY, KEY_NOT_FOUND, DUPLICATE_KEY }; // extend if necessary
 
+
 typedef unsigned long ulint;
 
 class HashTable {
@@ -30,7 +31,7 @@ public:
 
   void rehash(size_t); // sets a new size for the hash table, rehashes the hash table 
 
-  // extend if necessary
+
 };
 
 /* Implement the 
@@ -62,6 +63,7 @@ HashTable::~HashTable(){
  delete this->table;
 }
 
+
 /*
   Get the number of buckets
 */
@@ -77,35 +79,48 @@ size_t HashTable::hash_function(ulint key){
 }
 
 
-// find and return data associated with key
+/*
+ Find the value for a key
+ Parameter:
+ key-  The key for the hashnode
+*/
 ulint HashTable::getValue(ulint key){
 
   //Find the key hash
   ulint index= hash_function(key);
 
+  //Create a new node to save the Hashlist
+  list<HashNode> *HListCopy=nullptr;
+ 
   //Index the bucket
-  list<HashNode> *HashListCopy=nullptr;
-  HashListCopy= &(table->at(index));
+  HListCopy= &(table->at(index));
 
-  //Find if the value exits
-  for (HashNode &hashNode: *HashListCopy){
-    if (hashNode.getKey()==key){
+  //Loop through the List and see if a node exists
+  for(HashNode &hashNode: *HListCopy){
+    //If the key exists
+    if(key==hashNode.getKey()){
     //return the value
       return hashNode.getValue();
     }
   }
 
-  //Return error message
+  //Return error message if the key is not found
   throw KEY_NOT_FOUND;
 }
 
+/*
+  Method to insert a hashnode to the Hash table
+  Parameters:
+  key-  Key value to be hashed
+  value-  Data that is held in the node
+*/
 void HashTable::insert(ulint key, ulint value){
  
-  //Check size for rehash
+  //Check how full the HashTable
   if((num/size())>=0.9){
+    //Make the table bigger if it's too full
     rehash(2*size());
   }
-
 
 
   //Create new node
@@ -119,9 +134,14 @@ void HashTable::insert(ulint key, ulint value){
   (*table).at(index).push_back(nodeToAdd);
 
   num+=1;
+  cout <<"Inserted Successfull" <<endl;
 }
 
-
+/*
+  Method to erase a HashNode from the table
+  Parameter:
+  key-  key for the hashnode
+*/
 void HashTable::erase(ulint key){
 
 
@@ -130,26 +150,38 @@ void HashTable::erase(ulint key){
   
   //Check if the key exists
     //Index the bucket
-    list<HashNode>* HashListCopy= &(table->at(index));
+    list<HashNode>* HListCopy= &(table->at(index));
 
-    //Find if the value exits
-    for(list<HashNode>::iterator it=(*HashListCopy).begin(); it !=(*HashListCopy).end(); ++it){
+    //Loop though the list
+    for(list<HashNode>::iterator it=(*HListCopy).begin(); it !=(*HListCopy).end(); ++it){
+      //If the key is found
       if (it->getKey()==key){
-          it = (*HashListCopy).erase(it);
+        //Remove the node
+          it = (*HListCopy).erase(it);
+
+          cout << "Erase Successfull" <<endl;
+        //Stop the search
           break;
         }
       }
 }
 
-void HashTable::rehash(size_t newSize){
-  Table *originalTable=table;
 
+
+/*
+  Method to rehash the table when the contents of a table gets too full
+  Parameter:
+  newSize-  the size of the new table
+*/
+void HashTable::rehash(size_t newSize){
+  Table *oldTable=table;
+  try{
   table = new Table(newSize);
 
-  for (int index = 0; index < (int)(*originalTable).size(); index++)
+  for (int index = 0; index < (int)(*oldTable).size(); index++)
   {
-    if (!(originalTable->at(index).empty())){
-      for (HashNode &hashNode: (*originalTable).at(index))
+    if (!(oldTable->at(index).empty())){
+      for (HashNode &hashNode: (*oldTable).at(index))
       {
         ulint key=hashNode.getKey();
         ulint value=hashNode.getValue();
@@ -157,9 +189,14 @@ void HashTable::rehash(size_t newSize){
       }
     }
   }
-
-  delete originalTable;
+}catch(...){
+  //return OUT_OF_MEMORY;
+  cout<< "You have ran out of memory" << endl;
+ // cout<< "You have ran out of memeory" <<endl;
 }
+  delete oldTable;
+}
+
 
 
 #endif

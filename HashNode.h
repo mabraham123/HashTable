@@ -28,7 +28,7 @@ public:
 
   //Destructor
  ~HashNode(){
-    cout << "Destructor Called" << endl;
+    
   }
 
   unsigned long getKey() { return key; }
