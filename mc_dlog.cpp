@@ -11,45 +11,64 @@
 
 using namespace std;
 
-void orderOfG (int g, int a, int n);
+ulint orderOfG (ulint ,ulint);
+ulint modPower(ulint, ulint, ulint);
 
 int main(){
-	orderOfG(12,24,10);
+	cout << orderOfG(3,8436401) <<endl;
 	return 0;
 }
 
 
-
-void orderOfG(int g, int a, int n){
+ulint orderOfG(ulint g,ulint n){
  default_random_engine e(static_cast<unsigned int>(time(0)));
  uniform_int_distribution<int> distribution(0,n-1);
 
  HashTable Ord;
  
 	//Repeart sqrt n times
-	for (int i = 0; i < sqrt(n); ++i)
+	for (ulint i = 0; i < sqrt(n); ++i)
 	{
 		//Generate a random number(r) between 0 and n-1
-		int r= distribution(e);
+		ulint r= distribution(e);
+		//cout<< r<<endl;
 
 
 		//If y=g^r is already a key in Ord
-		for (int i = 0; i < (int)Ord.size(); ++i)
-		{
-			//for (HashNode &hashNode: Ord){
 		      //get value
-				if (Ord.getValue(pow(g,r)) != 101){
-					cout<<"Yas"<<endl;
+		ulint y= modPower(g,r,n);
+				try{
+					ulint v = Ord.getValue(y);
+				//return r-Ord[h(y)] or Ord[h(y)]-r which ever is begger than 0
+					if(r>v){
+						return r-v;
+					}else if((v>r)){
+						return (v-r);
+					}
+				}catch(HashTableError k){
+					Ord.insert(y,r);
 				}
-		     
-			
-		}
-			//return r-Ord[h(y)] or r-Ord[h(y)]-r which ever is begger than 0
-
-		//else
-			//Add key y to Ord with value r
 	
 	}
-
 	//If after sqrt n attempts you fail to find a duplicate key- assume order of g is n-1
+	return (n-1);
+
 }
+
+ulint modPower(ulint g, ulint r, ulint n){
+	ulint result=1;
+
+	//if even
+	if(r != 0){
+		if(r%2==0){
+			result=modPower(g*g,r/2,n);	
+		}else{
+			result=g*modPower(g,r-1,n);		
+		}
+	}
+	return result;
+
+
+
+}
+

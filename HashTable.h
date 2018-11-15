@@ -47,9 +47,7 @@ public:
 HashTable::HashTable(){
   this->table= new Table(11, list<HashNode>());
   this->num=0;
-  const int OUT_OF_MEMORY= 100;
-  const int KEY_NOT_FOUND= 101;
-  const int DUPLICATE_KEY= 102;
+
 }
 
 /*
@@ -58,9 +56,7 @@ HashTable::HashTable(){
 HashTable::HashTable(size_t sizeOfTable){
   this->table=new Table(sizeOfTable, list<HashNode>());
   this->num=0;
-  const int OUT_OF_MEMORY= 100;
-  const int KEY_NOT_FOUND= 101;
-  const int DUPLICATE_KEY= 102;
+
 
 }
 
@@ -113,7 +109,7 @@ ulint HashTable::getValue(ulint key){
   }
 
   //Return error message if the key is not found
-  return KEY_NOT_FOUND;
+  throw KEY_NOT_FOUND;
 }
 
 /*
@@ -142,7 +138,9 @@ void HashTable::insert(ulint key, ulint value){
   (*table).at(index).push_back(nodeToAdd);
 
   num+=1;
-  cout <<"Inserted Successfull" <<endl;
+  if(num%1000==0){
+    cout<<num<<endl;
+  }
 }
 
 /*
