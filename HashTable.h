@@ -164,8 +164,6 @@ void HashTable::erase(ulint key){
       if (it->getKey()==key){
         //Remove the node
           it = (*HListCopy).erase(it);
-
-          cout << "Erase Successfull" <<endl;
         //Stop the search
           break;
         }
@@ -197,6 +195,7 @@ void HashTable::rehash(size_t newSize){
   }
 }catch(...){
   //return OUT_OF_MEMORY;
+  throw OUT_OF_MEMORY;
   cout<< "You have ran out of memory" << endl;
  // cout<< "You have ran out of memeory" <<endl;
 }

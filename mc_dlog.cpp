@@ -36,8 +36,9 @@ ulint orderOfG(ulint g,ulint n){
 
 		//If y=g^r is already a key in Ord
 		      //get value
-		ulint y= modPower(g,r,n);
+				ulint y= modPower(g,r,n);
 				try{
+					//Find if the value exists
 					ulint v = Ord.getValue(y);
 				//return r-Ord[h(y)] or Ord[h(y)]-r which ever is begger than 0
 					if(r>v){
@@ -46,6 +47,7 @@ ulint orderOfG(ulint g,ulint n){
 						return (v-r);
 					}
 				}catch(HashTableError k){
+					//If the key is not in the table
 					Ord.insert(y,r);
 				}
 	
@@ -72,3 +74,6 @@ ulint modPower(ulint g, ulint r, ulint n){
 
 }
 
+// ulint descreteLog(){
+
+// }
