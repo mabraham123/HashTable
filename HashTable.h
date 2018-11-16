@@ -91,7 +91,7 @@ size_t HashTable::hash_function(ulint key){
 ulint HashTable::getValue(ulint key){
 
   //Find the key hash
-  ulint index= hash_function(key);
+  size_t index= hash_function(key);
 
   //Create a new node to save the Hashlist
   list<HashNode> *HListCopy=nullptr;
@@ -138,9 +138,9 @@ void HashTable::insert(ulint key, ulint value){
   (*table).at(index).push_back(nodeToAdd);
 
   num+=1;
-  if(num%1000==0){
-    cout<<num<<endl;
-  }
+  // if(num%1000==0){
+  //   cout<<num<<endl;
+  // }
 }
 
 /*
