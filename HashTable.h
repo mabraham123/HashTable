@@ -47,7 +47,6 @@ public:
 HashTable::HashTable(){
   this->table= new Table(11, list<HashNode>());
   this->num=0;
-
 }
 
 /*
@@ -56,8 +55,6 @@ HashTable::HashTable(){
 HashTable::HashTable(size_t sizeOfTable){
   this->table=new Table(sizeOfTable, list<HashNode>());
   this->num=0;
-
-
 }
 
 /*
@@ -138,9 +135,6 @@ void HashTable::insert(ulint key, ulint value){
   (*table).at(index).push_back(nodeToAdd);
 
   num+=1;
-  // if(num%1000==0){
-  //   cout<<num<<endl;
-  // }
 }
 
 /*
@@ -194,10 +188,7 @@ void HashTable::rehash(size_t newSize){
     }
   }
 }catch(...){
-  //return OUT_OF_MEMORY;
   throw OUT_OF_MEMORY;
-  cout<< "You have ran out of memory" << endl;
- // cout<< "You have ran out of memeory" <<endl;
 }
   delete oldTable;
 }

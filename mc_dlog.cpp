@@ -17,34 +17,41 @@ ulint descreteLog(ulint, ulint, ulint);
 
 
 int main(int argc, char *argv[]){
-	//cout << orderOfG(3,8436401) <<endl;
-	if (argc < 3) {
+	//Check if 3 parameters were passed
+	if (argc != 4) {
         cerr << "Enter values 3 values only" << endl;
         return 1;
     }
     
+    //Parse the parameters from string
 	ulint g= atoi(argv[1]);
 	ulint r= atoi(argv[2]);
 	ulint n= atoi(argv[3]);
 	
-    // ulint descrete= descreteLog(3, 8436400,8436401);
-    // ulint orderOf= orderOfG(3,8436401);
+	//Get the values
     ulint descrete= descreteLog(g,r,n);
     ulint orderOf= orderOfG(g,n);
 
+    //Work out the answer
 	long long int answer= descrete%orderOf;
 
+	//Check if the answer is negative
 	if(answer <0){
 		answer=answer+orderOf;
 	}
 
-	//cout << descreteLog(12,145123123,11231323) <<endl;
+	//Print the answer
 	cout<<answer<< endl;
 
 	return 0;
 }
 
-
+/*
+	Method to work out the order of G
+	Parameters:
+	g-	base
+	n- 	value to mod by
+*/
 ulint orderOfG(ulint g,ulint n){
  default_random_engine e(static_cast<unsigned int>(time(0)));
  uniform_int_distribution<int> distribution(0,n-1);
@@ -56,7 +63,6 @@ ulint orderOfG(ulint g,ulint n){
 	{
 		//Generate a random number(r) between 0 and n-1
 		ulint r= distribution(e);
-		//cout<< r<<endl;
 
 
 		//If y=g^r is already a key in Ord
@@ -82,6 +88,13 @@ ulint orderOfG(ulint g,ulint n){
 
 }
 
+/*
+	Method to work out the exponetial modulo
+	Parameters:
+	g-	Base
+	r- 	Power/Exponetial
+	n- 	Value to mod by
+*/
 ulint modPower(ulint g, ulint r, ulint n){
 	ulint result=1;
 	g=g%n;
@@ -107,11 +120,15 @@ ulint modPower(ulint g, ulint r, ulint n){
 
 
 	return result;
-
-
-
 }
 
+/*
+	Method to work out the descrete logarithm
+	Parameters:
+	g-	Base
+	a-	Base
+	n- 	Value to mod by
+*/
 ulint descreteLog(ulint g, ulint a, ulint n){
 	default_random_engine e(static_cast<unsigned int>(time(0)));
  	uniform_int_distribution<int> distribution(0,n-1);
@@ -124,8 +141,6 @@ ulint descreteLog(ulint g, ulint a, ulint n){
 		ulint r= distribution(e);
 
 		//If y=a*g^r mod n is a key in table A
-		// ulint z=(modPower(a,1,n));
-		// ulint x=(modPower(g,r,n)); 
 		ulint y=modPower(((modPower(a,1,n))*(modPower(g,r,n))),1,n);
 		
 		try{
